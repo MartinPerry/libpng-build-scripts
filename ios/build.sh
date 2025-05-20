@@ -32,7 +32,7 @@ buildIOS()
     PLATFORM="iPhoneOS"
     PLATFORMDIR="iOS"
 
-    echo "$(pwd)"
+    echo "Current dir $(pwd)"
 	
     if [[ "${BITCODE}" == "nobitcode" ]]; then
         CC_BITCODE_FLAG=""
@@ -69,7 +69,7 @@ buildIOS()
     make clean >> "/tmp/libpng${LIBPNG_VERSION}-${PLATFORM}-${ARCH}-${BITCODE}.log" 2>&1
 
     popd > /dev/null
-	cd ..
+	
 }
 
 buildIOSsim()
@@ -123,7 +123,7 @@ buildIOSsim()
     make clean >> "/tmp/libpng${LIBPNG_VERSION}-${PLATFORM}-${ARCH}-${BITCODE}.log" 2>&1
 
     popd > /dev/null	
-	cd ..
+	
 }
 
 ########################################
