@@ -40,6 +40,7 @@ buildIOS()
         CC_BITCODE_FLAG="-fembed-bitcode"
     fi
 
+	rm -rf "srcbuild-${ARCH}-${PLATFORMDIR}"	
 	mkdir -p "srcbuild-${ARCH}-${PLATFORMDIR}"
 	cd "srcbuild-${ARCH}-${PLATFORMDIR}"
 
@@ -60,7 +61,7 @@ buildIOS()
     
     ../configure -prefix="${INSTALL_DIR}" \
         --enable-static=yes --enable-shared=no \
-        --disable-programs --disable-tools --disable-examples \
+        --disable-tools \
         --host="arm-apple-darwin"
     
     make -j8 >> "/tmp/${LIBPNG_VERSION}-${PLATFORM}-${ARCH}-${BITCODE}.log" 2>&1
@@ -93,6 +94,7 @@ buildIOSsim()
         CC_BITCODE_FLAG="-fembed-bitcode"
     fi
 
+	rm -rf "srcbuild-${ARCH}-${PLATFORMDIR}"	
 	mkdir -p "srcbuild-${ARCH}-${PLATFORMDIR}"
 	cd "srcbuild-${ARCH}-${PLATFORMDIR}"
 
@@ -113,7 +115,7 @@ buildIOSsim()
     
     ../configure -prefix="${INSTALL_DIR}" \
         --enable-static=yes --enable-shared=no \
-        --disable-programs --disable-tools --disable-examples \
+        --disable-tools \
         --host=${HOST}
     
     make -j8 >> "/tmp/${LIBPNG_VERSION}-${PLATFORM}-${ARCH}-${BITCODE}.log" 2>&1
@@ -154,10 +156,7 @@ rm -rf ${OUTPUT_DIR}/lib/*
 mkdir -p "${OUTPUT_DIR}/lib"
 mkdir -p "${OUTPUT_DIR}/include"
 
-rm -rf ${BUILD_DIR}/${LIBPNG_VERSION}-*
-rm -rf ${BUILD_DIR}/${LIBPNG_VERSION}-*.log
 
-rm -rf "${SRC_DIR}"
 
 if [ ! -e "libpng${LIBPNG_VERSION}.zip" ]; then
     echo "Downloading libpng${LIBPNG_VERSION}.zip"
