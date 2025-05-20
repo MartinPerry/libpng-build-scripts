@@ -28,12 +28,12 @@ buildIOS()
     BITCODE=$2
 
     pushd . > /dev/null	
-    #cd "${SRC_DIR}"
-
+    
     PLATFORM="iPhoneOS"
     PLATFORMDIR="iOS"
 
-    
+    echo "$(pwd)"
+	
     if [[ "${BITCODE}" == "nobitcode" ]]; then
         CC_BITCODE_FLAG=""
     else
@@ -64,9 +64,9 @@ buildIOS()
         --disable-tools \
         --host="arm-apple-darwin"
     
-    make -j8 >> "/tmp/${LIBPNG_VERSION}-${PLATFORM}-${ARCH}-${BITCODE}.log" 2>&1
-    make install-strip >> "/tmp/${LIBPNG_VERSION}-${PLATFORM}-${ARCH}-${BITCODE}.log" 2>&1
-    make clean >> "/tmp/${LIBPNG_VERSION}-${PLATFORM}-${ARCH}-${BITCODE}.log" 2>&1
+    make -j8 >> "/tmp/libpng${LIBPNG_VERSION}-${PLATFORM}-${ARCH}-${BITCODE}.log" 2>&1
+    make install-strip >> "/tmp/libpng${LIBPNG_VERSION}-${PLATFORM}-${ARCH}-${BITCODE}.log" 2>&1
+    make clean >> "/tmp/libpng${LIBPNG_VERSION}-${PLATFORM}-${ARCH}-${BITCODE}.log" 2>&1
 
     popd > /dev/null
 	cd ..
@@ -118,9 +118,9 @@ buildIOSsim()
         --disable-tools \
         --host=${HOST}
     
-    make -j8 >> "/tmp/${LIBPNG_VERSION}-${PLATFORM}-${ARCH}-${BITCODE}.log" 2>&1
-    make install-strip >> "/tmp/${LIBPNG_VERSION}-${PLATFORM}-${ARCH}-${BITCODE}.log" 2>&1
-    make clean >> "/tmp/${LIBPNG_VERSION}-${PLATFORM}-${ARCH}-${BITCODE}.log" 2>&1
+    make -j8 >> "/tmp/libpng${LIBPNG_VERSION}-${PLATFORM}-${ARCH}-${BITCODE}.log" 2>&1
+    make install-strip >> "/tmp/libpng${LIBPNG_VERSION}-${PLATFORM}-${ARCH}-${BITCODE}.log" 2>&1
+    make clean >> "/tmp/libpng${LIBPNG_VERSION}-${PLATFORM}-${ARCH}-${BITCODE}.log" 2>&1
 
     popd > /dev/null	
 	cd ..
@@ -129,7 +129,7 @@ buildIOSsim()
 ########################################
 
 echo
-echo "Building LibPNG ${LIBPNG_VERSION}"
+echo "Building LibPNG libpng${LIBPNG_VERSION}"
 
 set -e
 
