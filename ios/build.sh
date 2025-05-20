@@ -94,6 +94,12 @@ buildIOSsim()
         CC_BITCODE_FLAG="-fembed-bitcode"
     fi
 
+	RUNTARGET=""	
+	if [[ $ARCH != "i386" ]]; then
+		RUNTARGET="-target ${ARCH}-apple-ios${IOS_MIN_SDK_VERSION}-simulator"
+	fi
+
+
 	rm -rf "srcbuild-${ARCH}-${PLATFORMDIR}"	
 	mkdir -p "srcbuild-${ARCH}-${PLATFORMDIR}"
 	cd "srcbuild-${ARCH}-${PLATFORMDIR}"
@@ -103,7 +109,7 @@ buildIOSsim()
     export CROSS_SDK="${PLATFORM}${IOS_SDK_VERSION}.sdk"
     export BUILD_TOOLS="${DEVELOPER}"
     #export CC="${BUILD_TOOLS}/usr/bin/gcc"
-    export CFLAGS="-arch ${ARCH} -pipe -Os -gdwarf-2 -isysroot ${CROSS_TOP}/SDKs/${CROSS_SDK} -miphoneos-version-min=${IOS_MIN_SDK_VERSION} ${CC_BITCODE_FLAG} -ffunction-sections -fdata-sections -fno-unwind-tables -fno-asynchronous-unwind-tables -flto"
+    export CFLAGS="-arch ${ARCH} -pipe -Os -gdwarf-2 -isysroot ${CROSS_TOP}/SDKs/${CROSS_SDK} -miphoneos-version-min=${IOS_MIN_SDK_VERSION} ${CC_BITCODE_FLAG} ${RUNTARGET} -ffunction-sections -fdata-sections -fno-unwind-tables -fno-asynchronous-unwind-tables -flto"
     export LDFLAGS="-arch ${ARCH} -isysroot ${CROSS_TOP}/SDKs/${CROSS_SDK}"
     export CXXFLAGS="${CFLAGS} -std=c++17"
 
