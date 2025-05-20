@@ -27,7 +27,7 @@ buildIOS()
     ARCH=$1
     BITCODE=$2
 
-    pushd . > /dev/null
+    pushd . > /dev/null	
     #cd "${SRC_DIR}"
 
     PLATFORM="iPhoneOS"
@@ -40,6 +40,8 @@ buildIOS()
         CC_BITCODE_FLAG="-fembed-bitcode"
     fi
 
+	mkdir -p "srcbuild-${ARCH}-${PLATFORMDIR}"
+	cd "srcbuild-${ARCH}-${PLATFORMDIR}"
 
     #export $PLATFORM
     export CROSS_TOP="${DEVELOPER}/Platforms/${PLATFORM}.platform/Developer"
@@ -50,22 +52,23 @@ buildIOS()
     export LDFLAGS="-arch ${ARCH} -isysroot ${CROSS_TOP}/SDKs/${CROSS_SDK}"
     export CXXFLAGS="${CFLAGS} -std=c++17"
 
-    echo "Building ${LIBPNG_VERSION} for ${PLATFORM} ${IOS_SDK_VERSION} ${ARCH} ${BITCODE}"
+    echo "Building libpng${LIBPNG_VERSION} for ${PLATFORM} ${IOS_SDK_VERSION} ${ARCH} ${BITCODE}"
 
 
     INSTALL_DIR="${BUILD_DIR}/${LIBPNG_VERSION}-${PLATFORMDIR}-${ARCH}"
 
     
-    ./configure -prefix="${INSTALL_DIR}" \
+    ../configure -prefix="${INSTALL_DIR}" \
         --enable-static=yes --enable-shared=no \
         --disable-programs --disable-tools --disable-examples \
         --host="arm-apple-darwin"
     
-    make -j8
-    make install-strip
-    make clean
+    make -j8 >> "/tmp/${LIBPNG_VERSION}-${PLATFORM}-${ARCH}-${BITCODE}.log" 2>&1
+    make install-strip >> "/tmp/${LIBPNG_VERSION}-${PLATFORM}-${ARCH}-${BITCODE}.log" 2>&1
+    make clean >> "/tmp/${LIBPNG_VERSION}-${PLATFORM}-${ARCH}-${BITCODE}.log" 2>&1
 
     popd > /dev/null
+	cd ..
 }
 
 buildIOSsim()
@@ -90,6 +93,8 @@ buildIOSsim()
         CC_BITCODE_FLAG="-fembed-bitcode"
     fi
 
+	mkdir -p "srcbuild-${ARCH}-${PLATFORMDIR}"
+	cd "srcbuild-${ARCH}-${PLATFORMDIR}"
 
     #export $PLATFORM
     export CROSS_TOP="${DEVELOPER}/Platforms/${PLATFORM}.platform/Developer"
@@ -100,22 +105,23 @@ buildIOSsim()
     export LDFLAGS="-arch ${ARCH} -isysroot ${CROSS_TOP}/SDKs/${CROSS_SDK}"
     export CXXFLAGS="${CFLAGS} -std=c++17"
 
-    echo "Building ${LIBPNG_VERSION} for ${PLATFORM} ${IOS_SDK_VERSION} ${ARCH} ${BITCODE}"
+    echo "Building libpng${LIBPNG_VERSION} for ${PLATFORM} ${IOS_SDK_VERSION} ${ARCH} ${BITCODE}"
 
 
     INSTALL_DIR="${BUILD_DIR}/${LIBPNG_VERSION}-${PLATFORMDIR}-${ARCH}"
 
     
-    ./configure -prefix="${INSTALL_DIR}" \
+    ../configure -prefix="${INSTALL_DIR}" \
         --enable-static=yes --enable-shared=no \
         --disable-programs --disable-tools --disable-examples \
         --host=${HOST}
     
-    make -j8
-    make install-strip
-    make clean
+    make -j8 >> "/tmp/${LIBPNG_VERSION}-${PLATFORM}-${ARCH}-${BITCODE}.log" 2>&1
+    make install-strip >> "/tmp/${LIBPNG_VERSION}-${PLATFORM}-${ARCH}-${BITCODE}.log" 2>&1
+    make clean >> "/tmp/${LIBPNG_VERSION}-${PLATFORM}-${ARCH}-${BITCODE}.log" 2>&1
 
-    popd > /dev/null
+    popd > /dev/null	
+	cd ..
 }
 
 ########################################
@@ -174,19 +180,19 @@ fi
 
 #================
 
-cd "libpng-libpng${LIBPNG_VERSION}"
+cd "${BASE_DIR}/libpng-libpng${LIBPNG_VERSION}"
 #./autogen.sh
 
 
 echo "Building iOS libraries (${BITCODE})"
 
-#buildIOS "arm64" ${BITCODE}
-#buildIOS "arm64e" ${BITCODE}
+buildIOS "arm64" ${BITCODE}
+buildIOS "arm64e" ${BITCODE}
 
-#lipo \
-#    "${BUILD_DIR}/${LIBPNG_VERSION}-iOS-arm64/lib/libpng.a" \
-#    "${BUILD_DIR}/${LIBPNG_VERSION}-iOS-arm64e/lib/libpng.a" \
-#    -create -output "${OUTPUT_DIR}/lib/libpng_${LIBPNG_VERSION}_iOS.a"
+lipo \
+    "${BUILD_DIR}/${LIBPNG_VERSION}-iOS-arm64/lib/libpng.a" \
+    "${BUILD_DIR}/${LIBPNG_VERSION}-iOS-arm64e/lib/libpng.a" \
+    -create -output "${OUTPUT_DIR}/lib/libpng_${LIBPNG_VERSION}_iOS.a"
 
 
 buildIOSsim "x86_64" ${BITCODE}
