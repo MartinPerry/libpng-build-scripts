@@ -204,8 +204,8 @@ buildIOSsim "x86_64" ${BITCODE}
 buildIOSsim "arm64" ${BITCODE}
 
 lipo \
-    "${BUILD_DIR}/${LIBPNG_VERSION}-iOS-x86_64/lib/libpng.a" \
-    "${BUILD_DIR}/${LIBPNG_VERSION}-iOS-arm64/lib/libpng.a" \
+    "${BUILD_DIR}/${LIBPNG_VERSION}-iOS-simulator-x86_64/lib/libpng.a" \
+    "${BUILD_DIR}/${LIBPNG_VERSION}-iOS-simulator-arm64/lib/libpng.a" \
     -create -output "${OUTPUT_DIR}/lib/libpng_${LIBPNG_VERSION}_iOS_simulator.a"
 
 echo "  Copying headers"
